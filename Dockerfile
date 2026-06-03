@@ -6,6 +6,8 @@ RUN mvn clean package -DskipTests -q
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-EXPOSE 8080
 COPY --from=build /app/target/*.jar app.jar
+RUN groupadd -r appgroup && useradd -r -g appgroup -u 1001 appuser
+USER appuser
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
